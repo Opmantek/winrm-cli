@@ -30,6 +30,8 @@ import (
 	"github.com/masterzen/winrm"
 	"github.com/mattn/go-isatty"
 )
+// WINRM version 
+var version = "1.2"
 
 func main() {
 	var (
@@ -46,11 +48,19 @@ func main() {
 		gencert  bool
 		certsize string
 		timeout  string
+		showVersion  bool
 	)
+	// get the username and password from env id present
+	if envUser := os.Getenv("WINRM_USERNAME"); envUser != "" {
+		user = envUser
+	}
+	if envPass := os.Getenv("WINRM_PASSWORD"); envPass != "" {
+		pass = envPass
+	}
 
 	flag.StringVar(&hostname, "hostname", "localhost", "winrm host")
-	flag.StringVar(&user, "username", "vagrant", "winrm admin username")
-	flag.StringVar(&pass, "password", "vagrant", "winrm admin password")
+	flag.StringVar(&user, "username", "vagrant", "winrm admin username (env: WINRM_USERNAME)")
+	flag.StringVar(&pass, "password", "vagrant", "winrm admin password (env: WINRM_PASSWORD)")
 	flag.BoolVar(&ntlm, "ntlm", false, "use use ntlm auth")
 	flag.BoolVar(&encoded, "encoded", false, "use base64 encoded password")
 	flag.IntVar(&port, "port", 5985, "winrm port")
@@ -60,8 +70,14 @@ func main() {
 	flag.BoolVar(&gencert, "gencert", false, "Generate x509 client certificate to use with secure connections")
 	flag.StringVar(&certsize, "certsize", "", "Priv RSA key between 512, 1024, 2048, 4096. Default :2048")
 	flag.StringVar(&timeout, "timeout", "0s", "connection timeout")
+	flag.BoolVar(&showVersion, "version", false, "print version and exit")
 
 	flag.Parse()
+
+	if showVersion {
+		fmt.Println(version)
+		os.Exit(0)
+	}
 
 	if encoded {
 		data, err := base64.StdEncoding.DecodeString(pass)
