@@ -59,8 +59,8 @@ func main() {
 	}
 
 	flag.StringVar(&hostname, "hostname", "localhost", "winrm host")
-	flag.StringVar(&user, "username", user, "winrm admin username (env: WINRM_USERNAME)")
-	flag.StringVar(&pass, "password", pass, "winrm admin password (env: WINRM_PASSWORD)")
+	flag.StringVar(&user, "username", "vagrant", "winrm admin username (env: WINRM_USERNAME)")
+	flag.StringVar(&pass, "password", "vagrant", "winrm admin password (env: WINRM_PASSWORD)")
 	flag.BoolVar(&ntlm, "ntlm", false, "use use ntlm auth")
 	flag.BoolVar(&encoded, "encoded", false, "use base64 encoded password")
 	flag.IntVar(&port, "port", 5985, "winrm port")
